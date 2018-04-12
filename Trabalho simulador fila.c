@@ -23,7 +23,7 @@ typedef struct clientes{ //quem compoe a fila
 }cliente;
 
 
-typedef struct filas10{ //cabeça da lista que indica inicio e fim
+typedef struct filas10{ //cabeÃ§a da lista que indica inicio e fim
 	struct elemento *ini;
 	struct elemento *fim;
 }filas;
@@ -48,7 +48,7 @@ void inicia_cliente(cliente pessoa){
 //	pessoa.prox = NULL;
 }
 
-filas* inicia_filas(filas *f){ //inicia cabeça da lista
+filas* inicia_filas(filas *f){ //inicia cabeÃ§a da lista
 	int i;
 	
 	if(f != NULL){
@@ -284,25 +284,44 @@ int tempo_operacao(cliente pessoa, filas *fn){
 }
 
 
-void marcacao(filas *fn, int i){
-//	int i;
+void transformar(filas *fn, int contcliente, int i){
 	
-//	printf("\n \n ");
-//	printf("\n         Fn                                                Fe\n");
-	for( i =  0; i < TAM; i++) 
-		printf("\n\t  | %d                \n", fn[i].ini->persona.id);
+	int y = 0;
+	
+	filas novo[TAM]; 
+	novo[i].ini = (elem *) malloc(sizeof(elem)); 
+	novo[i].ini = fn[i].ini;  
+	
+	int *vet = (int*) malloc(contcliente * sizeof(int));//vetor criado com tamanho da capacidade da estrutura auxiliar
+	
+	     while (novo[i].ini != NULL) {
+	     	   vet[y] = novo[i].ini->persona.id;
+	           printf("     %d ", vet[y]);
+	           y++;
+	           novo[i].ini = novo[i].ini->prox;
+	     }
+	     printf("\n");
+	     
 }
 
 
 void exibir_tela(filas *fn,int contcliente, int i){
 //	int i;
-	int mediaespera = 0, totalsaldo = 0, totaldep = 0, totalpag = 0;
+	int mediaespera = 0, totalsaque = 0, totaldep = 0, totalpag = 0;
+	
+//	if(fn[i].ini->persona.op == 1)
+//		totalsaque -=  fn[i].ini->persona.valor;
+//	else if	(fn[i].ini->persona.op == 2)
+//		totaldep += fn[i].ini->persona.valor;
+//	else 
+//	    totalpag -= fn[i].ini->persona.valor;	
+		
 	
 	printf("                        SIMULADOR DE FILAS DE BANCO                                 \n\n");
 	printf("         __________________________________________________________\n");
 	printf("         |                                                        |\n");
 	printf("         | Quantidade de clientes: %d                              |\n", contcliente);
-	printf("         | Saques R$ %d                                            |\n", totalsaldo);
+	printf("         | Saques R$ %d                                            |\n", totalsaque);
 	printf("         | Depositos R$ %d                                         |\n", totaldep);
 	printf("         | Pagamentos R$ %d                                        |\n", totalpag);
 	printf("         | Media de espera: %d                                     |\n", mediaespera);
@@ -316,7 +335,7 @@ void exibir_tela(filas *fn,int contcliente, int i){
 	fila[i].ini = (elem *) malloc(sizeof(elem));
 	fila[i].ini = fn[i].ini;
 	
-	marcacao(fn,i);
+	transformar(fn,contcliente, i);
 	
 //	printf("fila eletronica\n");
 //	while(eletro[i].ini != NULL){
@@ -324,12 +343,12 @@ void exibir_tela(filas *fn,int contcliente, int i){
 //		eletro[i].ini = eletro[i].ini->prox;
 //	}
 	
-	printf("\nfila eletronica e normal");
-	while(fila[i].ini != NULL){
-		printf("\n|[%d]: %d",i, fila[i].ini->persona.id);
-//		puts(fila[i].ini->persona.reacao);
-		fila[i].ini = fila[i].ini->prox;
-	}
+//	printf("\nfila eletronica e normal");
+//	while(fila[i].ini != NULL){
+//		printf("\n|[%d]: %d",i, fila[i].ini->persona.id);
+////		puts(fila[i].ini->persona.reacao);
+//		fila[i].ini = fila[i].ini->prox;
+//	}
 	
 }
 
