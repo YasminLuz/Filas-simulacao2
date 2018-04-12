@@ -4,6 +4,11 @@
 #include <time.h>
 #define TAM 10
 
+/*ajuda: https://www.youtube.com/watch?v=yOjgEXbKtME&index=4&list=PL8iN9FQ7_jt5QR_IKULU4arH8sEZ_2YqC
+https://www.youtube.com/watch?v=Uq0WLDQ-GfY
+
+*/
+
 typedef struct clientes{ //quem compoe a fila
 	int id;
 	int valor;
@@ -29,7 +34,6 @@ void inicia_cliente(cliente pessoa){
 	pessoa.valor = 0;
 	pessoa.op = 0;
 	pessoa.reacao = "(^_^)";
-//	pessoa.prox = NULL;
 }
 
 filas* inicia_filas(filas *f){ //inicia cabeça da lista
@@ -144,6 +148,8 @@ int inserirpriori (cliente pessoa, filas *fn){ //insere na fila
 	elem  *no = (elem *) malloc(sizeof(elem));
 	if(!no) return 0;
 	
+	
+//	
 //	for(i = 0; i < TAM; i++){ //auxiliares
 //		tmp[i].ini= (elem *) malloc(sizeof(elem));
 //		tmp[i].fim = (elem *) malloc(sizeof(elem));
@@ -166,11 +172,20 @@ int inserirpriori (cliente pessoa, filas *fn){ //insere na fila
 					fn[aux].fim = no;
 
 			} else{
-				   filas tmp[TAM];
-				
+				   filas tmp[TAM], ultimo[1];
+				   				
 				   tmp[aux].ini = fn[aux].ini;
 				   fn[aux].ini= no;
 				   fn[aux].ini->prox = tmp[aux].ini;
+				   
+				   while(tmp[aux].ini != NULL){
+				   	ultimo[0].ini = tmp[aux].ini;
+				   	tmp[aux].ini = tmp[aux].ini->prox;
+				   }
+				   
+				   fn[aux].fim = ultimo[0].ini;
+				   
+				   free(tmp[aux].ini);
 			}
 
 		return 1;
@@ -184,11 +199,20 @@ int inserirpriori (cliente pessoa, filas *fn){ //insere na fila
 				fn[aux].fim = no;
 				
 			} else {
-				   filas tmp[TAM];
-				
+				   filas tmp[TAM], ultimo[1];
+				   				
 				   tmp[aux].ini = fn[aux].ini;
 				   fn[aux].ini= no;
 				   fn[aux].ini->prox = tmp[aux].ini;
+				   
+				   while(tmp[aux].ini != NULL){
+				   	ultimo[0].ini = tmp[aux].ini;
+				   	tmp[aux].ini = tmp[aux].ini->prox;
+				   }
+				   
+				   fn[aux].fim = ultimo[0].ini;
+				   
+				   free(tmp[aux].ini);
 			}
 			
 		return 1;
@@ -266,29 +290,29 @@ int tempo_operacao(cliente pessoa, filas *fn){
 }
 
 
-void transformar(filas *fn, int contcliente, int i){
-	
-	int y = 0;
-	
-	filas novo[TAM]; 
-	novo[i].ini = (elem *) malloc(sizeof(elem)); 
-	novo[i].ini = fn[i].ini;  
-	
-	int *vet = (int*) malloc(contcliente * sizeof(int));//vetor criado com tamanho da capacidade da estrutura auxiliar
-	
-	     while (novo[i].ini != NULL) {
-	     	   vet[y] = novo[i].ini->persona.id;
-	           printf("     %d ", vet[y]);
-	           y++;
-	           novo[i].ini = novo[i].ini->prox;
-	     }
-	     printf("\n");
-	     
-}
+//void transformar(filas *fn, int contcliente, int i){
+//	
+//	int y = 0;
+//	
+//	filas novo[TAM]; 
+//	novo[i].ini = (elem *) malloc(sizeof(elem)); 
+//	novo[i].ini = fn[i].ini;  
+//	
+//	int *vet = (int*) malloc(contcliente * sizeof(int));//vetor criado com tamanho da capacidade da estrutura auxiliar
+//	
+//	     while (novo[i].ini != NULL) {
+//	     	   vet[y] = novo[i].ini->persona.id;
+//	           printf("     %d ", vet[y]);
+//	           y++;
+//	           novo[i].ini = novo[i].ini->prox;
+//	     }
+//	     printf("\n");
+//	     
+//}
 
 
 void exibir_tela(filas *fn,int contcliente, int i){
-//	int i;
+
 	int mediaespera = 0, totalsaque = 0, totaldep = 0, totalpag = 0;
 	
 //	if(fn[i].ini->persona.op == 1)
@@ -317,7 +341,7 @@ void exibir_tela(filas *fn,int contcliente, int i){
 	fila[i].ini = (elem *) malloc(sizeof(elem));
 	fila[i].ini = fn[i].ini;
 	
-	//transformar(fn,contcliente, i);
+//	transformar(fn,contcliente, i);
 	
 //	printf("fila eletronica\n");
 //	while(eletro[i].ini != NULL){
@@ -325,10 +349,10 @@ void exibir_tela(filas *fn,int contcliente, int i){
 //		eletro[i].ini = eletro[i].ini->prox;
 //	}
 	
-	printf("\nfila eletronica e normal");
+//	printf("\nfila eletronica e normal");
 	while(fila[i].ini != NULL){
 		printf("\n|[%d]: %d",i, fila[i].ini->persona.id);
-		puts(fila[i].ini->persona.reacao);
+//		puts(fila[i].ini->persona.reacao);
 		fila[i].ini = fila[i].ini->prox;
 	}
 	
@@ -366,8 +390,10 @@ int main(void){
 //	inicia_filas(fe);
 	inicia_cliente(pessoa);
 	
-	int contcliente = 0;
+	int contcliente = 0, totalsaque = 0;
 	
+		if(fn[i].ini->persona.op == 1)
+		totalsaque -=  fn[i].ini->persona.valor;
 	
 	do{
 		pessoa = randA(pessoa);	
@@ -396,9 +422,6 @@ int main(void){
 //        exibir_tela(*fn);
 
 
-
-//		printf("\n\nPressione 0 para sair...\n");
-//		scanf("%i", &press);
 	}while (contcliente != 20);
 	
 	
