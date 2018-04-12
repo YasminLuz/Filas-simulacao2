@@ -4,17 +4,6 @@
 #include <time.h>
 #define TAM 10
 
-//typedef struct reacoes{
-//	char *feliz;
-//	char *pressa;
-//	char *raiva;
-//}react;
-
-/*ajuda: https://www.youtube.com/watch?v=yOjgEXbKtME&index=4&list=PL8iN9FQ7_jt5QR_IKULU4arH8sEZ_2YqC
-https://www.youtube.com/watch?v=Uq0WLDQ-GfY
-
-*/
-
 typedef struct clientes{ //quem compoe a fila
 	int id;
 	int valor;
@@ -34,11 +23,6 @@ typedef struct elemento{ // lista que abriga cliente e proximos
 	struct elemento *prox;
 }elem;
 
-//void inicia_react(react* carinhas){
-//	carinhas->feliz = ":)";
-//	carinhas->pressa = ":|";
-//	carinhas->raiva = ":@";
-//}
 
 void inicia_cliente(cliente pessoa){
 	pessoa.id = 0;
@@ -160,8 +144,6 @@ int inserirpriori (cliente pessoa, filas *fn){ //insere na fila
 	elem  *no = (elem *) malloc(sizeof(elem));
 	if(!no) return 0;
 	
-	
-//	
 //	for(i = 0; i < TAM; i++){ //auxiliares
 //		tmp[i].ini= (elem *) malloc(sizeof(elem));
 //		tmp[i].fim = (elem *) malloc(sizeof(elem));
@@ -335,7 +317,7 @@ void exibir_tela(filas *fn,int contcliente, int i){
 	fila[i].ini = (elem *) malloc(sizeof(elem));
 	fila[i].ini = fn[i].ini;
 	
-	transformar(fn,contcliente, i);
+	//transformar(fn,contcliente, i);
 	
 //	printf("fila eletronica\n");
 //	while(eletro[i].ini != NULL){
@@ -343,12 +325,12 @@ void exibir_tela(filas *fn,int contcliente, int i){
 //		eletro[i].ini = eletro[i].ini->prox;
 //	}
 	
-//	printf("\nfila eletronica e normal");
-//	while(fila[i].ini != NULL){
-//		printf("\n|[%d]: %d",i, fila[i].ini->persona.id);
-////		puts(fila[i].ini->persona.reacao);
-//		fila[i].ini = fila[i].ini->prox;
-//	}
+	printf("\nfila eletronica e normal");
+	while(fila[i].ini != NULL){
+		printf("\n|[%d]: %d",i, fila[i].ini->persona.id);
+		puts(fila[i].ini->persona.reacao);
+		fila[i].ini = fila[i].ini->prox;
+	}
 	
 }
 
