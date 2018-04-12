@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #define TAM 10
+#define MAX 100
 
 typedef struct clientes{ //quem compoe a fila
 	int id;
