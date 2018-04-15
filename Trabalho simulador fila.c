@@ -307,9 +307,7 @@ void exibir_tela(filas *fn, cliente pessoa, short int contcliente, long int *tot
 	printf("         | Pagamentos R$ %ld                                        |\n", *totalpag);
 	printf("         | Media de espera: %d                                     |\n", mediaespera);
 	printf("         |=========================================================|\n");
-	
-	filas fila[TAM];//,normal[TAM];
-	
+
 }
 
 
@@ -350,7 +348,7 @@ int main(void){
 
 	cliente pessoa1, pessoa2;
 	
-	filas fn[TAM], fila[TAM];;
+	filas fn[TAM], fila[TAM];
 	
 	for(i = 0; i < TAM; i++){ //cria  espaco nas posicoes
 		fn[i].ini= (elem *) malloc (sizeof(elem));
