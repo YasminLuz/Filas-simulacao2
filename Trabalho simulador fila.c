@@ -10,9 +10,9 @@ https://www.youtube.com/watch?v=Uq0WLDQ-GfY
 */
 
 typedef struct clientes{ //quem compoe a fila
-	int id;
+	short int id;
 	int valor;
-	int op;//operacao 1-saque; 2-deposito; 3-pagamento; 
+	short int op;//operacao 1-saque; 2-deposito; 3-pagamento; 
 	char *reacao;
 }cliente;
 
@@ -39,32 +39,33 @@ void inicia_cliente(cliente pessoa){
 filas* inicia_filas(filas *f){ //inicia cabeça da lista
 	int i;
 	
-	if(f != NULL){
+//	if(f != NULL){
 		for(i = 0; i < TAM; i++){
 			f[i].ini = NULL;
 			f[i].fim = NULL;
 		}
-	}
+//	}
 	
 	return f;
 }
 
 cliente randA(cliente pessoa){//gera adultos
 
-	int i, random, randval, randop, randreac;
+	int randomid = 0, randval = 0, randop = 0, randreac = 0;
 	
 	srand(time(NULL));
-	for(i = 0; i <6;i++)
-    random = 16 + (rand() % 43) ;//faixa entre 16 e 59 anos
-    pessoa.id = random;
-    printf("\n\nGERA ADULTO %d", random);
+//	for(i = 0; i <6;i++)
+    randomid = 16 + (rand()%43) ;//faixa entre 16 e 59 anos
+    pessoa.id = randomid;
+    printf("\n\nGERA ADULTO %d", randomid);
      
-    randval = 50 + (rand() % 5000); 
+    randval = 50 + (rand()%5000); 
     pessoa.valor = randval;
+//    printf("\n\nVALOR ADULTO %d", randval);
 	 
-    randop = 1 + (rand() % 3);      
+    randop = 1 + (rand()%3);      
 	pessoa.op = randop;	 
-	
+//	printf("\nOP ADULTO %d", randop);
 	pessoa.reacao = "(^_^)";
 	
 	return pessoa;
@@ -72,18 +73,19 @@ cliente randA(cliente pessoa){//gera adultos
 
 cliente randP(cliente pessoa){//gera 60+
 
-	int i, random, randval, randop, randreac;
+	int randomid = 0, randval = 0, randop = 0, randreac = 0;
 	
 	srand(time(NULL));
 	
-    random = 60 + (rand() % 30);  // x = valor_minimo + rand() % ( valor_maximo - valor_minimo ) ;
-    pessoa.id = random;
-    printf("\n\nGERA IDOSO %d", random);
+    randomid = 60 + (rand()%30);  // x = valor_minimo + rand() % ( valor_maximo - valor_minimo ) ;
+    pessoa.id = randomid;
+//    printf("\n\nGERA IDOSO %d", random);
      
-    randval = 50 + (rand() % 5000); 
+    randval = 50 + (rand()%5000); 
     pessoa.valor = randval;
+//    printf("\n\nVALOR IDOSO %d", randval);
 	
-    randop = 1 + (rand() % 3); 
+    randop = 1 + (rand()%3); 
 	pessoa.op = randop;	 
 	
 	pessoa.reacao = "(^_^)";
@@ -94,12 +96,12 @@ cliente randP(cliente pessoa){//gera 60+
 
 
 int inserirfim (cliente pessoa, filas *fn){ //insere na fila
-	int aux;
+	int aux = 0;
 	
 	printf("\nENTRADA %d", pessoa.id);
 	
 	elem  *no = (elem * ) malloc(sizeof(elem));
-	if(!no) return 0;
+	if(!no) printf("cheio");//return 0;
 	
 	no->persona = pessoa;
 	no->prox = NULL;
@@ -107,25 +109,25 @@ int inserirfim (cliente pessoa, filas *fn){ //insere na fila
 	srand(time(NULL));
 	
     //distribuicao inicial nas filas
-    if((pessoa.valor < 1000) && (pessoa.id > 15 && pessoa.id < 60)){// 5 primeiras posicoes para fila caixa eletronico
+    if((pessoa.valor < 1000) && ((pessoa.id > 15) && (pessoa.id < 60))){// 5 primeiras posicoes para fila caixa eletronico
 
-			aux= rand()% 4; //posicao escolhida randomicamente de 0-4
-//			printf("AUX %d ", aux);
+			aux = rand()%4; //posicao escolhida randomicamente de 0-4
+
 			if(fn[aux].fim == NULL){ //procura por fila vazia
 				fn[aux].ini = no;
 				fn[aux].fim = no;
 					
 			}else{
 				fn[aux].fim->prox = no;
-				fn[aux].fim = no; 	  
+				fn[aux].fim = no; 	
 			}
-
+			
 		return 1;
 			   
-	}else if((pessoa.valor > 1000) && (pessoa.id > 15 && pessoa.id < 60)){ //fila caixa normal
+	}else if((pessoa.valor > 1000) && ((pessoa.id > 15) && (pessoa.id < 60))){ //fila caixa normal
 			
-			aux= 5 + rand()%4;
-//			printf("AUX2 norm %d ", aux);
+			aux= 5 + (rand()%4);
+
 			if(fn[aux].fim == NULL){
 				fn[aux].ini = no;
 				fn[aux].fim = no;
@@ -134,28 +136,19 @@ int inserirfim (cliente pessoa, filas *fn){ //insere na fila
 				fn[aux].fim->prox = no;
 				fn[aux].fim = no; 
 			}
-
+			
 		return 1;
 	}	
 }
 
 int inserirpriori (cliente pessoa, filas *fn){ //insere na fila
-	int i, aux;
-	
-//	if (!fn) return 0;
-//	if (!fe) return 0;
+	int aux = 0;
+
 	
 	elem  *no = (elem *) malloc(sizeof(elem));
-	if(!no) return 0;
+	if(!no) printf("cheio");//return 0;
 	
-	
-//	
-//	for(i = 0; i < TAM; i++){ //auxiliares
-//		tmp[i].ini= (elem *) malloc(sizeof(elem));
-//		tmp[i].fim = (elem *) malloc(sizeof(elem));
-//		tmp2[i].ini= (elem *) malloc(sizeof(elem));
-//		tmp2[i].fim = (elem *) malloc(sizeof(elem));
-//	}
+	printf("\nENTRADA %d", pessoa.id);
 	
 	no->persona = pessoa;
 	no->prox = NULL;
@@ -165,54 +158,53 @@ int inserirpriori (cliente pessoa, filas *fn){ //insere na fila
     //distribuicao inicial nas filas
     if((pessoa.valor < 1000)&& (pessoa.id > 59)){// 5 primeiras posicoes para fila caixa eletronico
 
-			aux= rand()% 4; 
+			aux = rand()%4; 
 			
 			if(fn[aux].fim == NULL){ //procura por fila vazia
 					fn[aux].ini = no;
 					fn[aux].fim = no;
-
+					
 			} else{
-				   filas tmp[TAM], ultimo[1];
+				   filas tmp[TAM], ultimo[TAM];
 				   				
 				   tmp[aux].ini = fn[aux].ini;
 				   fn[aux].ini= no;
 				   fn[aux].ini->prox = tmp[aux].ini;
+//				   fn[aux].fim->prox = tmp[aux].ini;
 				   
 				   while(tmp[aux].ini != NULL){
-				   	ultimo[0].ini = tmp[aux].ini;
+				   	ultimo[aux].ini = tmp[aux].ini;
+//				   	printf("\n ULTIMO %d", ultimo[aux].ini->persona.id);
 				   	tmp[aux].ini = tmp[aux].ini->prox;
 				   }
 				   
-				   fn[aux].fim = ultimo[0].ini;
-				   
-				   free(tmp[aux].ini);
+				   fn[aux].fim = ultimo[aux].ini;
 			}
-
+						
 		return 1;
 			   
 	}else if((pessoa.valor > 1000)&& (pessoa.id > 59)){ // 5 ultimas posicoes para fila caixa normal
 			
-			aux = 5 + (rand()%(TAM-1));
+			aux = 5 + (rand()%4);
 			
-			if(fn[i].fim == NULL){
+			if(fn[aux].fim == NULL){
 				fn[aux].ini = no;
 				fn[aux].fim = no;
 				
 			} else {
-				   filas tmp[TAM], ultimo[1];
+				   filas tmp[TAM], ultimo[TAM];
 				   				
 				   tmp[aux].ini = fn[aux].ini;
 				   fn[aux].ini= no;
 				   fn[aux].ini->prox = tmp[aux].ini;
+//				   fn[aux].fim->prox = tmp[aux].ini;
 				   
 				   while(tmp[aux].ini != NULL){
-				   	ultimo[0].ini = tmp[aux].ini;
+				   	ultimo[aux].ini = tmp[aux].ini;
 				   	tmp[aux].ini = tmp[aux].ini->prox;
 				   }
 				   
-				   fn[aux].fim = ultimo[0].ini;
-				   
-				   free(tmp[aux].ini);
+				   fn[aux].fim = ultimo[aux].ini;
 			}
 			
 		return 1;
@@ -220,36 +212,39 @@ int inserirpriori (cliente pessoa, filas *fn){ //insere na fila
 }
 
 
-void liberarcliente(filas *f){
-	int i;
-	
-	if (f != NULL){
+void liberarcliente(filas *fn, int pos){
+
 		elem *no;
-		while(f[i].ini !=NULL){
-			no = f[i].ini;
-			f[i].ini = f[i].ini->prox;
+		while(fn[pos].ini !=NULL){
+			no = fn[pos].ini;
+			fn[pos].ini = fn[pos].ini->prox;
 			free(no);
 		}
-		free(f);
-	}
+		free(fn);
 }
 
 
-int tempo_operacao(cliente pessoa, filas *fn){
+int tempo_operacao(filas *fn){
 	
-	int i;
+	int aux;
+	filas tmp[TAM];
 	
-	for (i = 0; i < TAM; i++){
+//	for (i = 0; i < TAM; i++){
+	srand(time(NULL));
+	aux = rand()%9;
 		
-		switch(fn[i].ini->persona.op){
+		switch(fn[aux].ini->persona.op){
 			
 			case 1:{
-				     if(fn[i].ini->persona.id > 15 && fn[i].ini->persona.id < 60)
+				     if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
 				       sleep(2);
 				     else
 				       sleep(2.6);
 				       
-				       liberarcliente(fn);
+				       tmp[aux].ini = fn[aux].ini;
+				       fn[aux].ini = fn[aux].ini->prox;
+				       
+				       liberarcliente(tmp, aux);
 				       printf("\a"); //emitir bip ao liberar
 				
 					break;
@@ -257,12 +252,15 @@ int tempo_operacao(cliente pessoa, filas *fn){
 				 
 				   
 			case 2:{
-					 if(fn[i].ini->persona.id > 15 && fn[i].ini->persona.id < 60)
+					 if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
 				       sleep(2);
 				     else
 				       sleep(2.6);
 				       
-				       liberarcliente(fn);
+				       tmp[aux].ini = fn[aux].ini;
+				       fn[aux].ini = fn[aux].ini->prox;
+				       
+				       liberarcliente(tmp, aux);
 				       
 				       printf("\a");
 				       
@@ -271,12 +269,15 @@ int tempo_operacao(cliente pessoa, filas *fn){
 			
 			
 			case 3:{
-				     if(fn[i].ini->persona.id > 15 && fn[i].ini->persona.id < 60)
+				     if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
 				       sleep(4);
 				     else
 				       sleep(5.2);
 				       
-				       liberarcliente(fn);
+				       tmp[aux].ini = fn[aux].ini;
+				       fn[aux].ini = fn[aux].ini->prox;
+				       
+				       liberarcliente(tmp, aux);
 				       
 				       printf("\a");
 				       
@@ -285,144 +286,132 @@ int tempo_operacao(cliente pessoa, filas *fn){
 			
 			default: return 0;	   
 		}
-	}
+//	}
 	return 1;
 }
 
 
-//void transformar(filas *fn, int contcliente, int i){
-//	
-//	int y = 0;
-//	
-//	filas novo[TAM]; 
-//	novo[i].ini = (elem *) malloc(sizeof(elem)); 
-//	novo[i].ini = fn[i].ini;  
-//	
-//	int *vet = (int*) malloc(contcliente * sizeof(int));//vetor criado com tamanho da capacidade da estrutura auxiliar
-//	
-//	     while (novo[i].ini != NULL) {
-//	     	   vet[y] = novo[i].ini->persona.id;
-//	           printf("     %d ", vet[y]);
-//	           y++;
-//	           novo[i].ini = novo[i].ini->prox;
-//	     }
-//	     printf("\n");
-//	     
-//}
+void exibir_tela(filas *fn, cliente pessoa, short int contcliente, long int *totaldep, long int *totalpag, long int *totalsaque){
 
-
-void exibir_tela(filas *fn,int contcliente, int i){
-
-	int mediaespera = 0, totalsaque = 0, totaldep = 0, totalpag = 0;
+	int mediaespera = 0;
 	
-//	if(fn[i].ini->persona.op == 1)
-//		totalsaque -=  fn[i].ini->persona.valor;
-//	else if	(fn[i].ini->persona.op == 2)
-//		totaldep += fn[i].ini->persona.valor;
-//	else 
-//	    totalpag -= fn[i].ini->persona.valor;	
-		
-	
-	printf("                        SIMULADOR DE FILAS DE BANCO                                 \n\n");
-	printf("         __________________________________________________________\n");
-	printf("         |                                                        |\n");
+	if(pessoa.op == 1)
+		*totalsaque -=  pessoa.valor;
+	else if	(pessoa.op == 2)
+		*totaldep += pessoa.valor;
+	else 
+	   	*totalpag -= pessoa.valor;
+	    
+	printf("         ========================================================== \n");    
+	printf("         |               SIMULADOR DE FILAS DE BANCO               |            ");
+	printf("         ==========================================================|\n");
+	printf("         |                                                         |\n");
 	printf("         | Quantidade de clientes: %d                              |\n", contcliente);
-	printf("         | Saques R$ %d                                            |\n", totalsaque);
-	printf("         | Depositos R$ %d                                         |\n", totaldep);
-	printf("         | Pagamentos R$ %d                                        |\n", totalpag);
+	printf("         | Saques R$ %ld                                            |\n", *totalsaque);
+	printf("         | Depositos R$ %ld                                         |\n", *totaldep);
+	printf("         | Pagamentos R$ %ld                                        |\n", *totalpag);
 	printf("         | Media de espera: %d                                     |\n", mediaespera);
-	printf("         |________________________________________________________|\n");
+	printf("         |=========================================================|\n");
 	
 	filas fila[TAM];//,normal[TAM];
 	
-//	eletro[i].ini = (elem *) malloc(sizeof(elem));
-//	eletro[i].ini = fe[i].ini;
+}
+
+
+void exibir_filas(filas *fn, filas *fila, int i){
+//	system("color 03");
 	
-	fila[i].ini = (elem *) malloc(sizeof(elem));
-	fila[i].ini = fn[i].ini;
-	
-//	transformar(fn,contcliente, i);
-	
-//	printf("fila eletronica\n");
-//	while(eletro[i].ini != NULL){
-//		puts(eletro[i].ini->persona.reacao);
-//		eletro[i].ini = eletro[i].ini->prox;
-//	}
-	
-//	printf("\nfila eletronica e normal");
-	while(fila[i].ini != NULL){
-		printf("\n|[%d]: %d",i, fila[i].ini->persona.id);
-//		puts(fila[i].ini->persona.reacao);
-		fila[i].ini = fila[i].ini->prox;
+	if(fn[i].ini != NULL){
+				fila[i].ini = (elem *) malloc(sizeof(elem));
+				fila[i].ini = fn[i].ini;
+				
+		printf("\n\n\t  |[%d]:", i);
+		
+				while(fila[i].ini != NULL){
+					printf("\t%d",fila[i].ini->persona.id);
+			//		puts(fila[i].ini->persona.reacao);
+					fila[i].ini = fila[i].ini->prox;
+				}
+				sleep(4);
 	}
-	
 }
 
  void limpar(){
  	 	
 	#ifdef __unix 
-		sleep(1); 
+		sleep(2); 
 		system("clear");
 	#elif _WIN32
-		sleep(1); 
+		sleep(2); 
 		system("cls");
 	#endif
 	
 }
 
-int main(void){
-	int i, aux;
 
-	cliente pessoa;
-//	pessoa = (cliente *) malloc(sizeof(cliente));
+
+int main(void){
+	int i = 0; long int aux = 0;
+
+	cliente pessoa1, pessoa2;
 	
-	filas fn[TAM];// fe[TAM]; //fila normal e fila eletronica
+	filas fn[TAM], fila[TAM];;
 	
 	for(i = 0; i < TAM; i++){ //cria  espaco nas posicoes
 		fn[i].ini= (elem *) malloc (sizeof(elem));
 		fn[i].fim= (elem *) malloc (sizeof(elem));
-//		fe[i].ini= (elem *) malloc (sizeof(elem));
-//		fe[i].fim= (elem *) malloc (sizeof(elem));
 	}
 	
 	
 	inicia_filas(fn);
-//	inicia_filas(fe);
-	inicia_cliente(pessoa);
+	inicia_cliente(pessoa1);
+	inicia_cliente(pessoa2);
 	
-	int contcliente = 0, totalsaque = 0;
+	long int aux1 = 0, aux2 = 0, aux3 = 0, cont = 0;
 	
-		if(fn[i].ini->persona.op == 1)
-		totalsaque -=  fn[i].ini->persona.valor;
+	short int contcliente = 0;
+	int mediaespera = 0;
+	long int *totaldep , *totalpag , *totalsaque ;
+	
+	totaldep = &aux1, totalpag = &aux2, totalsaque = &aux3;
+	
 	
 	do{
-		pessoa = randA(pessoa);	
-	 	inserirfim(pessoa, fn);
-	 	contcliente++;
+		/*pessoa adulta*/
+		pessoa1 = randA(pessoa1);	
+	 	if (inserirfim(pessoa1, fn) == 1) contcliente++;
 
-//		for(i = 0; i < TAM; i++){
-//			
-//			limpar();
-//            marcacao(fn, i);
-////			if(fn[i].ini != NULL)
-//	 			exibir_tela(fn, contcliente, i);
-//	 		else{
-//	 			exibir_tela(fn, contcliente, i);
-//	 			printf("\n\n  | ");
-//	 			continue;
-//			 }	
-//	 	}
-	 	inserirpriori(randP(pessoa), fn);
-		contcliente++;
-	 		
-	 	for( i = 0; i < TAM; i++){
-			limpar();
-			exibir_tela(fn, contcliente, i);
+		limpar();
+		
+		exibir_tela(fn, pessoa1, contcliente,totaldep, totalpag, totalsaque);
+		
+	 	for(i = 0; i < TAM; i++)
+			exibir_filas(fn,fila, i);
+			
+			
+	 	/*pessoa idosa*/
+		pessoa2 = randP(pessoa2); 	
+	 	if (inserirpriori(pessoa2, fn) == 1) contcliente++;
+	 	
+		limpar();
+		
+		exibir_tela(fn, pessoa2, contcliente,totaldep, totalpag, totalsaque);
+
+		//imprimir filas
+		for(i = 0; i < TAM; i++)
+			exibir_filas(fn,fila, i);
+			
+		cont++;	
+//		printf("CONTTTT %d", cont);
+		
+		if(cont == 2){
+			tempo_operacao(fn);
+			cont = 0;
+			contcliente--;
 		}
-//        exibir_tela(*fn);
 
 
-	}while (contcliente != 20);
+	}while (contcliente > 0);
 	
 	
 	return 0;
