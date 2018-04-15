@@ -4,11 +4,6 @@
 #include <time.h>
 #define TAM 10
 
-/*ajuda: https://www.youtube.com/watch?v=yOjgEXbKtME&index=4&list=PL8iN9FQ7_jt5QR_IKULU4arH8sEZ_2YqC
-https://www.youtube.com/watch?v=Uq0WLDQ-GfY
-
-*/
-
 typedef struct clientes{ //quem compoe a fila
 	short int id;
 	int valor;
@@ -402,7 +397,6 @@ int main(void){
 			exibir_filas(fn,fila, i);
 			
 		cont++;	
-//		printf("CONTTTT %d", cont);
 		
 		if(cont == 2){
 			tempo_operacao(fn);
