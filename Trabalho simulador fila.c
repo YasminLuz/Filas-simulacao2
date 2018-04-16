@@ -4,7 +4,13 @@
 #include <time.h>
 #include <conio.h>
 #define TAM 10
+#define TAMANHO 3
 
+//typedef struct reacoes{
+//	char normal[5];
+//	char pressa[4];
+//	char raiva[5];
+//}reacao;
 
 typedef struct clientes{ //quem compoe a fila
 	short int id;
@@ -33,6 +39,7 @@ void inicia_cliente(cliente pessoa){
 	pessoa.reacao = "(^_^)";
 }
 
+
 void inicia_filas(filas *f){ //inicia cabeça da lista
 	int i;
 
@@ -40,16 +47,15 @@ void inicia_filas(filas *f){ //inicia cabeça da lista
 			f[i].ini = NULL;
 			f[i].fim = NULL;
 		}
-	
-//	return f;
 }
+
 
 cliente randA(cliente pessoa){//gera adultos
 
 	int randomid = 0, randval = 0, randop = 0, randreac = 0;
 	
 	srand(time(NULL));
-//	for(i = 0; i <6;i++)
+
     randomid = 16 + (rand()%43) ;//faixa entre 16 e 59 anos
     pessoa.id = randomid;
 //    printf("\n\nGERA ADULTO %d", randomid);
@@ -65,6 +71,7 @@ cliente randA(cliente pessoa){//gera adultos
 	
 	return pessoa;
 }
+
 
 cliente randP(cliente pessoa){//gera 60+
 
@@ -87,7 +94,6 @@ cliente randP(cliente pessoa){//gera 60+
 	
 	return pessoa;
 }
-
 
 
 int inserirfim (cliente pessoa, filas *fn){ //insere na fila
@@ -136,6 +142,7 @@ int inserirfim (cliente pessoa, filas *fn){ //insere na fila
 	}	
 }
 
+
 int inserirprioridade (cliente pessoa, filas *fn){ //insere na fila
 	int aux = 0;
 
@@ -166,7 +173,7 @@ int inserirprioridade (cliente pessoa, filas *fn){ //insere na fila
 				fn[aux].ini= no;
 				fn[aux].ini->prox = tmp[aux].ini;
 				   
-				ultimo[aux].ini = tmp[aux].ini;   
+				ultimo[aux].ini = tmp[aux].ini;   //caso nao entre no laco
 				while(tmp[aux].ini != NULL){
 				   	ultimo[aux].ini = tmp[aux].ini;
 	//			   	printf("\n ULTIMO %d", ultimo[aux].ini->persona.id);
@@ -221,17 +228,16 @@ void liberarcliente(filas *fn, int pos){
 			fn[pos].fim = NULL;
 			
 		free(no);
-
 }
 
 
-int tempo_operacao(filas *fn){
+int tempo_operacao(filas *fn, char expressao[3][5]){
 	
-	int aux = 0, cont = 0;
-	clock_t t_ini, t_fim, tempo;
+	int aux = 0, aux2 = 0;
+	clock_t t_ini, t_fim;
+	float tempo;
 	filas tmp[TAM];
 	
-//	for (i = 0; i < TAM; i++){
 	srand(time(NULL));
 	
 	do{
@@ -239,50 +245,50 @@ int tempo_operacao(filas *fn){
 	}while(fn[aux].ini == NULL); //enquanto o randomico nao selecionar posicao vazia
 	
 	printf("\n\nVALOR RAND %d", aux);
-//	printf("\nOPERACAO ENTRADA %d", fn[aux].ini->persona.op);
+	printf("\nOPERACAO ENTRADA %d", fn[aux].ini->persona.op);
 	
 		switch(fn[aux].ini->persona.op){
 			
 			case 1:{//saque
-					
-						if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
-					    	sleep(4);
-						else
-					    	sleep(5.2);
+//					    t_ini = clock();
+							if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
+						    	sleep(4);
+							else
+						    	sleep(5.2);
+//				    	t_fim = clock();
 				    
-				    
-				       tmp[aux].ini = fn[aux].ini;
-				       fn[aux].ini = fn[aux].ini->prox;
-				       
-				       //altera reacoes dos clientes
-//				       if (sleep() <= 3){
-//				       		while(fn[aux].ini->prox != NULL){
-//				       			fn[aux].ini->persona.reacao = "(¬¬)";
-//				       			cont++;
-//				       			fn[aux].ini = fn[aux].ini->prox;
-//							}
-//							
-//							if (cont > 2)
-//								fn[aux].fim->persona.reacao = "('@ ')";
-//								
-//					   }else if(sleep() > 5){
+//				    	tempo = (float) ((t_fim - t_ini) / (CLOCKS_PER_SEC / 1000));
+//				    	printf("\nTEMPO %f", tempo);
+				    	
+				        tmp[aux].ini = fn[aux].ini;
+				        fn[aux].ini = fn[aux].ini->prox;
+//				       
+//   				    //altera reacoes dos clientes
+//				        if (tempo <= 4){
+				       		while(tmp[aux].ini != NULL){
+				       			aux2 = rand()%2;
+				       			fn[aux].ini->persona.reacao = expressao[aux2];
+				       			tmp[aux].ini = tmp[aux].ini->prox;
+							}
+								
+//					    }else if(tempo > 5){
 //						    while(fn[aux].ini->prox != NULL){
 //				       			fn[aux].ini->persona.reacao = "('@ ')";
 //				       			fn[aux].ini = fn[aux].ini->prox;
 //							}
-//					   }
-				       liberarcliente(tmp, aux);
-				       printf("\a"); //emitir bip ao liberar
+//					    }
+				        liberarcliente(tmp, aux);
+				        printf("\a"); //emitir bip ao liberar
 				
 					break;
 				   }
 				 
 				   
 			case 2:{//pagamento
-					 if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
-				       sleep(5);
-				     else
-				       sleep(5.5);
+					  if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
+				        sleep(5);
+				      else
+				        sleep(5.5);
 				       
 				       tmp[aux].ini = fn[aux].ini;
 				       fn[aux].ini = fn[aux].ini->prox;
@@ -368,7 +374,7 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
 	printf("         ========================================================== \n");    
 	printf("         |               SIMULADOR DE FILAS DE BANCO               |\n");
 	printf("         ==========================================================|\n");
-	printf("         |              Eletronico 0 - 4  | Caixa 5- 9             |\n");
+	printf("         |              Eletronico 0 - 4 | Caixa 5- 9              |\n");
 	printf("                                                                    \n");
 	printf("          Quantidade total de clientes: %i                          \n", contcliente);
 	printf("          Saques R$ %ld                                             \n", *totalsaque);
@@ -390,12 +396,13 @@ void exibir_filas(filas *fn, filas *fila, int i){
 //		else
 //			printf("\n\n\t\t  |[%d]:", i);
 				while(fila[i].ini != NULL){
-					printf("\t%d",fila[i].ini->persona.id);
-//					printf("\t %s",fila[i].ini->persona.reacao);
+//					printf("\t%d",fila[i].ini->persona.id);
+					printf("\t %s",fila[i].ini->persona.reacao);
 					fila[i].ini = fila[i].ini->prox;
 				}
 
 }
+
 
  void limpar(){
  	 	
@@ -407,7 +414,6 @@ void exibir_filas(filas *fn, filas *fila, int i){
 		system("cls");
 	#endif
 }
-
 
 
 int main(void){
@@ -423,6 +429,11 @@ int main(void){
 		fila[i].ini = (elem *) malloc(sizeof(elem));
 		fila[i].fim = (elem *) malloc(sizeof(elem));
 	}
+	
+	char expressoes[3][5] = {"(^_^)", "(¬¬')", "('@')"}; 
+	
+	printf(" %s", expressoes[2]);
+	sleep(2);
 	
 	
 	inicia_filas(fn);
@@ -471,7 +482,7 @@ int main(void){
 //		printf("\n\nCONTTTT %d", contaux);
 		
 		if(contaux == 4){
-			tempo_operacao(fn);
+			tempo_operacao(fn, expressoes);
 			contcliente--;
 			contaux = 0;
 		}
