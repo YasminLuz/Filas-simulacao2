@@ -231,18 +231,28 @@ void liberarcliente(filas *fn, int pos){
 }
 
 
-int tempo_operacao(filas *fn, char expressao[3][5]){
+int tempo_operacao(filas *fn, char expressoes[][6]){
 	
-	int aux = 0, aux2 = 0;
-	clock_t t_ini, t_fim;
-	float tempo;
-	filas tmp[TAM];
+	int aux2 = 0;
+//	clock_t t_ini, t_fim;
+//	float tempo;
+//	filas tmp[TAM];
+//	inicia_filas(tmp);
+	filas tmp[TAM];int aux, auxt = 0;
+			
+			srand(time(NULL));
 	
-	srand(time(NULL));
-	
-	do{
-		aux = rand()%9;
-	}while(fn[aux].ini == NULL); //enquanto o randomico nao selecionar posicao vazia
+			do{
+				aux = rand()%9;
+			}while(fn[aux].ini == NULL); //enquanto o randomico nao selecionar posicao vazia
+			
+			tmp[aux].ini = fn[aux].ini;
+			
+			while(tmp[aux].ini != NULL){
+				auxt = 1 + (rand()%2);
+				tmp[aux].ini->persona.reacao = expressoes[auxt];
+				tmp[aux].ini = tmp[aux].ini->prox;
+			}
 	
 	printf("\n\nVALOR RAND %d", aux);
 	printf("\nOPERACAO ENTRADA %d", fn[aux].ini->persona.op);
@@ -250,34 +260,18 @@ int tempo_operacao(filas *fn, char expressao[3][5]){
 		switch(fn[aux].ini->persona.op){
 			
 			case 1:{//saque
+						
 //					    t_ini = clock();
 							if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
 						    	sleep(4);
 							else
 						    	sleep(5.2);
 //				    	t_fim = clock();
-				    
+//				    	printf("\a");
 //				    	tempo = (float) ((t_fim - t_ini) / (CLOCKS_PER_SEC / 1000));
-//				    	printf("\nTEMPO %f", tempo);
-				    	
-				        tmp[aux].ini = fn[aux].ini;
-				        fn[aux].ini = fn[aux].ini->prox;
-//				       
-//   				    //altera reacoes dos clientes
-//				        if (tempo <= 4){
-				       		while(tmp[aux].ini != NULL){
-				       			aux2 = rand()%2;
-				       			fn[aux].ini->persona.reacao = expressao[aux2];
-				       			tmp[aux].ini = tmp[aux].ini->prox;
-							}
-								
-//					    }else if(tempo > 5){
-//						    while(fn[aux].ini->prox != NULL){
-//				       			fn[aux].ini->persona.reacao = "('@ ')";
-//				       			fn[aux].ini = fn[aux].ini->prox;
-//							}
-//					    }
-				        liberarcliente(tmp, aux);
+						
+				        liberarcliente(fn, aux);
+				        
 				        printf("\a"); //emitir bip ao liberar
 				
 					break;
@@ -285,33 +279,22 @@ int tempo_operacao(filas *fn, char expressao[3][5]){
 				 
 				   
 			case 2:{//pagamento
+			
+//				      tmp[aux].ini = fn[aux].ini;
+//				      fn[aux].ini = fn[aux].ini->prox;
+//				       
+//					  while(tmp[aux].ini->prox != NULL){
+//				       			aux2 = 1 + (rand()%2);
+//				       			fn[aux].ini->persona.reacao = expressao[aux2];
+//				       			tmp[aux].ini = tmp[aux].ini->prox;
+//					   }
+//					  
 					  if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
 				        sleep(5);
 				      else
 				        sleep(5.5);
-				       
-				       tmp[aux].ini = fn[aux].ini;
-				       fn[aux].ini = fn[aux].ini->prox;
-				       
-				       
-//				       if (sleep() <= 3){
-//				       		while(fn[aux].ini->prox != NULL){
-//				       			fn[aux].ini->persona.reacao = "(¬¬)";
-//				       			cont++;
-//				       			fn[aux].ini = fn[aux].ini->prox;
-//							}
-//							
-//							if (cont > 2)
-//								fn[aux].fim->persona.reacao = "('@ ')";
-//								
-//					   }else if(sleep() > 5){
-//						    while(fn[aux].ini->prox != NULL){
-//				       			fn[aux].ini->persona.reacao = "('@ ')";
-//				       			fn[aux].ini = fn[aux].ini->prox;
-//							}
-//					   }
-				       
-				       liberarcliente(tmp, aux);
+
+				       liberarcliente(fn, aux);
 				       
 				       printf("\a");
 				       
@@ -320,40 +303,29 @@ int tempo_operacao(filas *fn, char expressao[3][5]){
 			
 			
 			case 3:{//deposito
-				     if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
+			
+//				     tmp[aux].ini = fn[aux].ini;
+//				     fn[aux].ini = fn[aux].ini->prox;
+//				       
+//				     while(tmp[aux].ini->prox != NULL){
+//				       			aux2 = 1 + (rand()%2);
+//				       			fn[aux].ini->persona.reacao = expressao[aux2];
+//				       			tmp[aux].ini = tmp[aux].ini->prox;
+//					 }
+					 
+					 if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
 				       sleep(4);
 				     else
 				       sleep(5.2);
+
+				     liberarcliente(fn, aux);
 				       
-				       tmp[aux].ini = fn[aux].ini;
-				       fn[aux].ini = fn[aux].ini->prox;
-				       
-				       
-//				       if (sleep() <= 4){
-//				       		while(fn[aux].ini->prox != NULL){
-//				       			fn[aux].ini->persona.reacao = "(¬¬)";
-//				       			cont++;
-//				       			fn[aux].ini = fn[aux].ini->prox;
-//							}
-//							
-//							if (cont > 2)
-//								fn[aux].fim->persona.reacao = "('@ ')";
-//							
-//					   }else if(sleep() > 5){
-//						    while(fn[aux].ini->prox != NULL){
-//				       			fn[aux].ini->persona.reacao = "('@ ')";
-//				       			fn[aux].ini = fn[aux].ini->prox;
-//							}	
-//					   }
-				       
-				       liberarcliente(tmp, aux);
-				       
-				       printf("\a");
+				     printf("\a");
 				       
 					break;
 				   }
 			
-//			default: return 0;	   
+			default: return 0;	   
 		}
 
 	return 1;
@@ -430,9 +402,9 @@ int main(void){
 		fila[i].fim = (elem *) malloc(sizeof(elem));
 	}
 	
-	char expressoes[3][5] = {"(^_^)", "(¬¬')", "('@')"}; 
+	char expressoes[3][6] = {"(^_^)", "(+_+)", "(>_<)"}; //o(>< )o
 	
-	printf(" %s", expressoes[2]);
+//	printf(" %s", expressoes[2]);
 	sleep(2);
 	
 	
@@ -481,8 +453,13 @@ int main(void){
 			
 //		printf("\n\nCONTTTT %d", contaux);
 		
-		if(contaux == 4){
+		if(contaux == 2){
+			
+
 			tempo_operacao(fn, expressoes);
+//			printf("\a");
+						
+			
 			contcliente--;
 			contaux = 0;
 		}
