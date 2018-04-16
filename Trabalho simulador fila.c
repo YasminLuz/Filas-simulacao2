@@ -9,7 +9,7 @@
 typedef struct clientes{ //quem compoe a fila
 	short int id;
 	int valor;
-	short int op;//operacao 1-saque; 2-deposito; 3-pagamento; 
+	short int op;//operacao 1-saque; 2-pagamento; 3-deposito; 
 	char *reacao;
 }cliente;
 
@@ -33,7 +33,7 @@ void inicia_cliente(cliente pessoa){
 	pessoa.reacao = "(^_^)";
 }
 
-filas* inicia_filas(filas *f){ //inicia cabeça da lista
+void inicia_filas(filas *f){ //inicia cabeça da lista
 	int i;
 
 		for(i = 0; i < TAM; i++){
@@ -41,7 +41,7 @@ filas* inicia_filas(filas *f){ //inicia cabeça da lista
 			f[i].fim = NULL;
 		}
 	
-	return f;
+//	return f;
 }
 
 cliente randA(cliente pessoa){//gera adultos
@@ -96,7 +96,7 @@ int inserirfim (cliente pessoa, filas *fn){ //insere na fila
 //	printf("\nENTRADA %d", pessoa.id);
 	
 	elem  *no = (elem * ) malloc(sizeof(elem));
-	if(!no) printf("cheio");//return 0;
+	if(!no) return 0;
 	
 	no->persona = pessoa;
 	no->prox = NULL;
@@ -141,9 +141,9 @@ int inserirprioridade (cliente pessoa, filas *fn){ //insere na fila
 
 	
 	elem  *no = (elem *) malloc(sizeof(elem));
-	if(!no) printf("cheio");//return 0;
+	if(!no) return 0; //printf("cheio");
 	
-	printf("\nENTRADA %d", pessoa.id);
+//	printf("\nENTRADA %d", pessoa.id);
 	
 	no->persona = pessoa;
 	no->prox = NULL;
@@ -166,6 +166,7 @@ int inserirprioridade (cliente pessoa, filas *fn){ //insere na fila
 				fn[aux].ini= no;
 				fn[aux].ini->prox = tmp[aux].ini;
 				   
+				ultimo[aux].ini = tmp[aux].ini;   
 				while(tmp[aux].ini != NULL){
 				   	ultimo[aux].ini = tmp[aux].ini;
 	//			   	printf("\n ULTIMO %d", ultimo[aux].ini->persona.id);
@@ -192,7 +193,8 @@ int inserirprioridade (cliente pessoa, filas *fn){ //insere na fila
 			    fn[aux].ini= no;
 			    fn[aux].ini->prox = tmp[aux].ini;
 //			    fn[aux].fim->prox = tmp[aux].ini;
-				   
+				
+				ultimo[aux].ini = tmp[aux].ini;   
 			    while(tmp[aux].ini != NULL){
 				   	ultimo[aux].ini = tmp[aux].ini;
 				   	tmp[aux].ini = tmp[aux].ini->prox;
@@ -219,12 +221,6 @@ void liberarcliente(filas *fn, int pos){
 			fn[pos].fim = NULL;
 			
 		free(no);
-//		free(fn[pos].ini);
-//		while(fn[pos].ini !=NULL){
-//			no = fn[pos].ini;
-//			fn[pos].ini = fn[pos].ini->prox;
-//			free(no);
-//		}
 
 }
 
@@ -232,8 +228,7 @@ void liberarcliente(filas *fn, int pos){
 int tempo_operacao(filas *fn){
 	
 	int aux = 0, cont = 0;
-	time_t t_ini, t_fim;
-	float tempo;
+	clock_t t_ini, t_fim, tempo;
 	filas tmp[TAM];
 	
 //	for (i = 0; i < TAM; i++){
@@ -241,10 +236,10 @@ int tempo_operacao(filas *fn){
 	
 	do{
 		aux = rand()%9;
-	}while(fn[aux].ini== NULL); //enquanto o randomico nao selecionar posicao vazia
+	}while(fn[aux].ini == NULL); //enquanto o randomico nao selecionar posicao vazia
 	
 	printf("\n\nVALOR RAND %d", aux);
-	printf("\nOPERACAO ENTRADA %d", fn[aux].ini->persona.op);
+//	printf("\nOPERACAO ENTRADA %d", fn[aux].ini->persona.op);
 	
 		switch(fn[aux].ini->persona.op){
 			
@@ -283,11 +278,11 @@ int tempo_operacao(filas *fn){
 				   }
 				 
 				   
-			case 2:{//deposito
+			case 2:{//pagamento
 					 if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
-				       sleep(4);
+				       sleep(5);
 				     else
-				       sleep(5.2);
+				       sleep(5.5);
 				       
 				       tmp[aux].ini = fn[aux].ini;
 				       fn[aux].ini = fn[aux].ini->prox;
@@ -318,11 +313,11 @@ int tempo_operacao(filas *fn){
 				   }	
 			
 			
-			case 3:{//pagamento
+			case 3:{//deposito
 				     if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
-				       sleep(5);
+				       sleep(4);
 				     else
-				       sleep(5.5);
+				       sleep(5.2);
 				       
 				       tmp[aux].ini = fn[aux].ini;
 				       fn[aux].ini = fn[aux].ini->prox;
@@ -373,7 +368,7 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
 	printf("         ========================================================== \n");    
 	printf("         |               SIMULADOR DE FILAS DE BANCO               |\n");
 	printf("         ==========================================================|\n");
-	printf("         |              Caixa 0 - 4  | Eletronica 5- 9             |\n");
+	printf("         |              Eletronico 0 - 4  | Caixa 5- 9             |\n");
 	printf("                                                                    \n");
 	printf("          Quantidade total de clientes: %i                          \n", contcliente);
 	printf("          Saques R$ %ld                                             \n", *totalsaque);
