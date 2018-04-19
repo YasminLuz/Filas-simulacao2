@@ -302,9 +302,28 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 }
 
 
-void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep, long int *totalpag, long int *totalsaque){
+void contfilas(filas fn[], int pos, int *cont){
+	//int x = 0;// *cont;//= {0,0,0,0,0,0,0,0,0,0};
+//	cont = (int *) malloc(sizeof(int));
+//	cont = &x;
+	
+		if (fn[pos].ini != NULL){
+		
+			while (fn[pos].ini != NULL){
+			   	(cont)++;
+				fn[pos].ini = fn[pos].ini->prox;
+			}
+		}
+//else 
+//		 return 0;
 
-	int mediaespera[TAM] = {0,0,0,0,0,0,0,0,0,0}, contfila[TAM] = {0,0,0,0,0,0,0,0,0,0}, aux = 0, x = 0, y = 0;
+//	return *cont;
+}
+
+
+void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep, long int *totalpag, long int *totalsaque, int *mediaespera){
+
+	int aux = 0, x = 0, valor[TAM] = {0,0,0,0,0,0,0,0,0,0}, cont = 0;
 	cliente fpessoa[1];
 	
 	for(x = 0; x < TAM; x++){ //incrementa somente quem está no inicio das filas
@@ -332,17 +351,13 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
 	printf("          Pagamentos R$ %ld                                         \n", *totalpag);
     printf("          Media de espera                                           \n");
 	
-	//for(x = 0; x < TAM; x++){
-//		while (fn[x].ini != NULL){
-//		   	contfila[x]+=1;
-//			printf("CONT FILA %d", contfila[x]);
-//			fn[x].ini = fn[x].ini->prox;
-//			x++;
-//		}
-	//}
 	for(x = 0; x < TAM; x++){	
-		//if (fn[x].ini != NULL)
-			//mediaespera[x] = ((4+5+4)*contfila[x]) / (contfila[x]/2);   // ((saque+deposito+pagamento) * quantpessoas) / (quantpessoas/2);
+		if (fn[x].ini != NULL){
+			//valor[x]= 
+			contfilas(fn, x, &cont);
+			printf("CONT FILA %d", cont);
+			mediaespera[x] += ((4+5+4)* cont) / (cont/2); //((saque+deposito+pagamento) * quantpessoas) / (quantpessoas/2);
+		}	
 	printf("                          [%d]: %d s                                \n",x, mediaespera[x]);
 	}
 	printf("         |=========================================================|\n");
@@ -351,7 +366,7 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
 
 
 void exibir_filas(filas *fn, filas *fila, int i){
-//	system("color 03");
+	//system("color 04");
 	
 		fila[i].ini = fn[i].ini;
 
@@ -405,8 +420,7 @@ int main(void){
 	
 	long int aux1 = 0, aux2 = 0, aux3 = 0;
 	
-	int contcliente = 0;
-	int mediaespera = 0;
+	int contcliente = 0, mediaespera[TAM] = {0,0,0,0,0,0,0,0,0,0};
 	long int *totaldep , *totalpag , *totalsaque ;
 	
 	totaldep = &aux1, totalpag = &aux2, totalsaque = &aux3;
@@ -420,7 +434,7 @@ int main(void){
 		
 		limpar();
 		
-		exibir_tela(fn, pessoa1, contcliente, totaldep, totalpag, totalsaque);
+		exibir_tela(fn, pessoa1, contcliente, totaldep, totalpag, totalsaque, mediaespera);
 		
 		/*imprimir filas*/
 	 	for(i = 0; i < TAM; i++)
@@ -434,7 +448,7 @@ int main(void){
 	 	
 		limpar();
 		
-		exibir_tela(fn, pessoa2, contcliente, totaldep, totalpag, totalsaque);
+		exibir_tela(fn, pessoa2, contcliente, totaldep, totalpag, totalsaque, mediaespera);
 		
 		/*imprimir filas*/
 		for(i = 0; i < TAM; i++)
