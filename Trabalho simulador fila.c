@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <conio.h>
+#include <Windows.h>
 #define TAM 10
 
 typedef struct clientes{ //quem compoe a fila
@@ -255,9 +255,9 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 			case 1:{//saque
 
 							if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
-						    	sleep(4);
+						    	Sleep(4000);
 							else
-						    	sleep(5.2);
+						    	Sleep(5200);
 //				    	
 				        liberarcliente(fn, aux);
 				        
@@ -269,9 +269,9 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 				   
 			case 2:{//pagamento  
 					  if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
-				        sleep(5);
+				        Sleep(5000);
 				      else
-				        sleep(5.5);
+				        Sleep(5500);
 
 				       liberarcliente(fn, aux);
 				       
@@ -284,9 +284,9 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 			case 3:{//deposito
 					 
 					 if(fn[aux].ini->persona.id > 15 && fn[aux].ini->persona.id < 60)
-				       sleep(4);
+				       Sleep(4000);
 				     else
-				       sleep(5.2);
+				       Sleep(5200);
 
 				     liberarcliente(fn, aux);
 				       
@@ -304,14 +304,20 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 
 void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep, long int *totalpag, long int *totalsaque){
 
-	int mediaespera = 0;
+	int mediaespera[TAM], x = 0;
 	
-	if(pessoa.op == 1)
-		*totalsaque -=  pessoa.valor;
-	else if	(pessoa.op == 2)
-		*totaldep += pessoa.valor;
-	else 
-	   	*totalpag -= pessoa.valor;
+	for(x = 0; x < TAM; x++){
+		
+		if (fn[x].ini != NULL){
+			if(fn[x].ini->persona.valor == 1)
+				*totalsaque -=  fn[x].ini->persona.valor;
+			else if	(fn[x].ini->persona.valor == 2)
+				*totaldep += fn[x].ini->persona.valor;
+			else 
+			   	*totalpag -= fn[x].ini->persona.valor;
+		} else 
+		  continue;	   	
+	}
 	    
 	printf("         ========================================================== \n");    
 	printf("         |               SIMULADOR DE FILAS DE BANCO               |\n");
@@ -322,7 +328,10 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
 	printf("          Saques R$ %ld                                             \n", *totalsaque);
 	printf("          Depositos R$ %ld                                          \n", *totaldep);
 	printf("          Pagamentos R$ %ld                                         \n", *totalpag);
-	printf("          Media de espera: %d                                       \n", mediaespera);
+	for(x = 0; x < TAM; x++){
+		//limpar();
+		printf("          Media de espera [%d]: %d                                       \n",x, mediaespera);
+	}
 	printf("         |=========================================================|\n");
 	
 }
@@ -347,10 +356,10 @@ void exibir_filas(filas *fn, filas *fila, int i){
  void limpar(){
  	 	
 	#ifdef __unix 
-		sleep(2); 
+		Sleep(2000); 
 		system("clear");
 	#elif _WIN32
-		sleep(2); 
+		Sleep(2000); 
 		system("cls");
 	#endif
 }
@@ -370,7 +379,7 @@ int main(void){
 		fila[i].fim = (elem *) malloc(sizeof(elem));
 	}
 	
-	char expressoes[3][6] = {"(^_^)", "(-_-)", "(>_<)"}; //o(>< )o
+	char expressoes[3][6] = {"(^_^)", "(-_-)", "('@')"}; //o(>< )
 	
 //	printf(" %s", expressoes[2]);
 	sleep(2);
@@ -413,7 +422,7 @@ int main(void){
 		limpar();
 		
 		exibir_tela(fn, pessoa2, contcliente, totaldep, totalpag, totalsaque);
-
+		
 		/*imprimir filas*/
 		for(i = 0; i < TAM; i++)
 			exibir_filas(fn, fila, i);
