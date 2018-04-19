@@ -304,19 +304,21 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 
 void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep, long int *totalpag, long int *totalsaque){
 
-	int mediaespera[TAM], x = 0;
+	int mediaespera[TAM] = {0,0,0,0,0,0,0,0,0,0}, contfila[TAM] = {0,0,0,0,0,0,0,0,0,0}, aux = 0, x = 0, y = 0;
+	cliente fpessoa[1];
 	
-	for(x = 0; x < TAM; x++){
+	for(x = 0; x < TAM; x++){ //incrementa somente quem está no inicio das filas
+			
+			if (fn[x].ini != NULL){
+				if(fn[x].ini->persona.valor == 1)
+					*totalsaque -=  fn[x].ini->persona.valor;
+				else if	(fn[x].ini->persona.valor == 2)
+					*totaldep += fn[x].ini->persona.valor;
+				else 
+				   	*totalpag -= fn[x].ini->persona.valor;
+			} else 
+			  continue;	  
 		
-		if (fn[x].ini != NULL){
-			if(fn[x].ini->persona.valor == 1)
-				*totalsaque -=  fn[x].ini->persona.valor;
-			else if	(fn[x].ini->persona.valor == 2)
-				*totaldep += fn[x].ini->persona.valor;
-			else 
-			   	*totalpag -= fn[x].ini->persona.valor;
-		} else 
-		  continue;	   	
 	}
 	    
 	printf("         ========================================================== \n");    
@@ -328,9 +330,20 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
 	printf("          Saques R$ %ld                                             \n", *totalsaque);
 	printf("          Depositos R$ %ld                                          \n", *totaldep);
 	printf("          Pagamentos R$ %ld                                         \n", *totalpag);
-	for(x = 0; x < TAM; x++){
-		//limpar();
-		printf("          Media de espera [%d]: %d                                       \n",x, mediaespera);
+    printf("          Media de espera                                           \n");
+	
+	//for(x = 0; x < TAM; x++){
+//		while (fn[x].ini != NULL){
+//		   	contfila[x]+=1;
+//			printf("CONT FILA %d", contfila[x]);
+//			fn[x].ini = fn[x].ini->prox;
+//			x++;
+//		}
+	//}
+	for(x = 0; x < TAM; x++){	
+		//if (fn[x].ini != NULL)
+			//mediaespera[x] = ((4+5+4)*contfila[x]) / (contfila[x]/2);   // ((saque+deposito+pagamento) * quantpessoas) / (quantpessoas/2);
+	printf("                          [%d]: %d s                                \n",x, mediaespera[x]);
 	}
 	printf("         |=========================================================|\n");
 	
@@ -412,7 +425,7 @@ int main(void){
 		/*imprimir filas*/
 	 	for(i = 0; i < TAM; i++)
 			exibir_filas(fn, fila, i);
-			
+		
 			
 	 	/*pessoa idosa*/
 		pessoa2 = randP(pessoa2); 	
@@ -426,7 +439,7 @@ int main(void){
 		/*imprimir filas*/
 		for(i = 0; i < TAM; i++)
 			exibir_filas(fn, fila, i);
-		
+	
 		
 		if(contaux == 2){
 			tempo_operacao(fn, expressoes);
