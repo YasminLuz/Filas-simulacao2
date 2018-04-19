@@ -247,8 +247,13 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 				tmp[aux].ini = tmp[aux].ini->prox;
 			}
 	
-	printf("\n\nVALOR RAND %d", aux);
-	printf("\nOPERACAO ENTRADA %d", fn[aux].ini->persona.op);
+	printf("\n\nCLIENTE ATENDIDO %d", aux);
+	switch(fn[aux].ini->persona.op){
+		case 1:printf("\nOPERACAO ENTRADA: SAQUE %d", fn[aux].ini->persona.op);break;
+		case 2:printf("\nOPERACAO ENTRADA:PAGAMENTO %d", fn[aux].ini->persona.op);break;
+		case 3:printf("\nOPERACAO DEPOSITO: %d", fn[aux].ini->persona.op);break;
+	}
+	
 	
 		switch(fn[aux].ini->persona.op){
 			
@@ -302,22 +307,17 @@ int tempo_operacao(filas *fn, char expressoes[][6]){
 }
 
 
-void contfilas(filas fn[], int pos, int *cont){
-	//int x = 0;// *cont;//= {0,0,0,0,0,0,0,0,0,0};
+int contfilas(filas *fn, int pos){
+	int cont = 0;//= {0,0,0,0,0,0,0,0,0,0};
 //	cont = (int *) malloc(sizeof(int));
 //	cont = &x;
 	
-		if (fn[pos].ini != NULL){
-		
 			while (fn[pos].ini != NULL){
-			   	(cont)++;
+			   	cont++;
 				fn[pos].ini = fn[pos].ini->prox;
 			}
-		}
-//else 
-//		 return 0;
-
-//	return *cont;
+			
+			return cont;
 }
 
 
@@ -352,11 +352,12 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
     printf("          Media de espera                                           \n");
 	
 	for(x = 0; x < TAM; x++){	
+	
 		if (fn[x].ini != NULL){
 			//valor[x]= 
-			contfilas(fn, x, &cont);
-			printf("CONT FILA %d", cont);
-			mediaespera[x] += ((4+5+4)* cont) / (cont/2); //((saque+deposito+pagamento) * quantpessoas) / (quantpessoas/2);
+			//cont = contfilas(fn, x);
+			//printf("CONT FILA %d", cont);
+			mediaespera[x] += ((4+5+4)/3)*2;    //((4+5+4)* cont) / (cont/2); //((saque+deposito+pagamento) * quantpessoas) / (quantpessoas/2);
 		}	
 	printf("                          [%d]: %d s                                \n",x, mediaespera[x]);
 	}
@@ -366,7 +367,7 @@ void exibir_tela(filas *fn, cliente pessoa, int contcliente, long int *totaldep,
 
 
 void exibir_filas(filas *fn, filas *fila, int i){
-	//system("color 04");
+	system("color F4");
 	
 		fila[i].ini = fn[i].ini;
 
